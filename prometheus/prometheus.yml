@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "app-catalogo-api-job"
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - app-catalogo-api:80

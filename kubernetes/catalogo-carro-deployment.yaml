@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogo-carros-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: catalogo-carros
+  template:
+    metadata:
+      labels:
+        app: catalogo-carros
+    spec:
+      containers:
+        - name: catalogo-carros-container
+          image: marcoservio/catalogo-carros:latest
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /WeatherForecast
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /WeatherForecast
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200M
+            limits:
+              cpu: 500m
+              memory: 500M
