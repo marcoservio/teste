@@ -3,34 +3,42 @@
 
 
 #	API de Catálogo de Carros
+Este é um projeto desenvolvido como parte da demonstração dos meus conhecimentos. 
 
-Este é um projeto de Catálogo de Carros desenvolvido como parte da demonstração dos meus conhecimentos. 
-A aplicação consiste em uma API para gerenciar um catálogo de carros, permitindo a criação, leitura, atualização e exclusão de carros, que foi containerizada com Docker e pode ser implantada em um cluster Kubernetes.
+A aplicação é uma API que possibilita o gerenciamento de um catálogo de carros, oferecendo funcionalidades para criar, ler, atualizar e excluir registros de carros. Essa API foi containerizada utilizando Docker, o que permite sua execução em ambientes isolados de forma consistente. Além disso, ela pode ser implantada em um cluster Kubernetes, possibilitando a escalabilidade e o gerenciamento eficiente dos recursos.
+
+Para garantir agilidade e automatização de tarefas, a aplicação utiliza CI/CD (Integração Contínua/Entrega Contínua). Esse processo automatizado facilita a construção, teste, implantação e atualização da aplicação, tornando o ciclo de desenvolvimento mais eficiente e confiável.
+
+Em resumo, a aplicação consiste em uma API containerizada com Docker, que gerencia um catálogo de carros e pode ser implantada em um ambiente Kubernetes, aproveitando os benefícios da automação fornecidos pelo CI/CD.
 
 
 
 ## Tecnologias Utilizadas
-
 - .NET 6.0
+- XUnit
+- MySQL
 - Docker
 - Kubernetes
 - Prometheus
 - Grafana
-- MySQL
+- Alertmanager - Slack
+- NGINX
+- CI/CD
+- Git/GitHub/GitLab
 
 
 
 ## Pré-requisitos
-+ Docker
-
 + .NET 6.0
+
++ Docker
 
 + Kubernetes
 
 
 
 ## Estrutura do Projeto
-CatalogoCarros/ - Contém o código-fonte da API em ASP.NET 6.0.
+src/ - Contém o código-fonte da API em ASP.NET 6.0.
 kubernetes/ - Contém os arquivos de configuração para implantar a API no Kubernetes.
 
 
@@ -49,10 +57,10 @@ kubernetes/ - Contém os arquivos de configuração para implantar a API no Kube
 1. Suba o Docker Compose da API:
 
    ```bash
-   docker-compose up
+   docker-compose up -d
    ```
 
-2. Acesse a API em http://localhost:8888.
+2. Acesse a API em http://localhost/WeatherForecast
 
 
 
@@ -60,25 +68,30 @@ kubernetes/ - Contém os arquivos de configuração para implantar a API no Kube
 
 Certifique-se de que seu cluster Kubernetes esteja em execução e configurado corretamente.
 
-1. Implante a API, o Prometheus no Kubernetes:
+1. Aplique os ConfigMaps:
 
    ```bash
-   kubectl apply -f kubernetes/catalogo-carro-deployment.yaml
-   kuebctl apply -f kubernetes/prometheus-deployment.yaml
+   kubectl apply -f prometheus-config.yaml
+   kubectl apply -f prometheus-alert-config.yaml
+   kubectl apply -f alertmanager-config.yaml
    ```
 
-2. Exponha o serviço para acesso externo do cluster e externo:
+2. Aplique os Serviços:
 
    ```bash
-   kubectl apply -f kubernetes/catalogo-carro-svc-interno.yaml.yaml
-   kuebctl apply -f kubernetes/svc-catalogo-carro.yaml
-   kuebctl apply -f kubernetes/svc-prometheus.yaml
+   kubectl apply -f catalogo-carro-clusterip.yaml
+   kubectl apply -f catalogo-carro-nodeport.yaml
+   kubectl apply -f prometheus-nodeport.yaml
+   kubectl apply -f alertmanager-clusterip.yaml
+   kubectl apply -f alertmanager-nodeport.yaml
    ```
 
-3. Aplicar arquivo de config para configurações do Prometheus
+3. Aplique os Deployments
 
    ```bash
-   kubectl apply -f kubernetes/prometheus-config.yaml
+   kubectl apply -f catalogo-carro-deployment.yaml
+   kubectl apply -f alertmanager-deployment.yaml
+   kubectl apply -f prometheus-deployment.yaml
    ```
 
 4. Verifique o status da implantação:
@@ -93,28 +106,26 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
    kubectl get svc
    ```
 
-6. Se o cluster estiver local acessar utilizando o localhost, se estiver na nuvem acessar com o IP gerado do Load Balancer
+6. Se o cluster estiver local acessar utilizando o localhost, se estiver na nuvem acessar com o IP gerado do Load Balancer. Porta 31222 API, Porta 30001 Prometheus, Porta 30002 Alertmenager.
 
    ```http
-   API -> http://localhost:31222
-   Prometheus -> http://localhost:30001 
+   http://localhost:31222
+   http://localhost:30001 
+   http://localhost:30002 
    ```
 
    
 
 ## Contribuição
-
 Este projeto foi desenvolvido por:
 
 - [marcoservio](https://github.com/marcoservio)
-- [Nome do Autor 2](https://github.com/autor2)
 
 Sinta-se à vontade para contribuir com melhorias para este projeto. Basta fazer um fork, realizar as alterações e enviar um pull request. Será um prazer revisar e mesclar suas contribuições.
 
 
 
 ## Licença
-
 Este projeto está licenciado sob a licença MIT.
 
 
@@ -129,7 +140,6 @@ Grafana Documentation
 
 
 ## Contato
-
 - Email: [marcoservio22@hotmail.com](mailto:marcoservio22@hotmail.com.com)
 
 - GitHub: [marcoservio](https://github.com/marcoservio)

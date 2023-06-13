@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOST='app-catalogo-api'
+HOST='proxy-catalogo-api'
 
 while true
     do
@@ -26,7 +26,6 @@ while true
 
 	curl --silent --output /dev/null http://${HOST}/WeatherForecast
 
-	#sleep $TEMP
-	sleep 0.75
+	sleep 0.50
 done
 

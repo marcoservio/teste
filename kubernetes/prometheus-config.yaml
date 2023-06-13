@@ -6,9 +6,19 @@ data:
   prometheus.yml: |-
     global:
       scrape_interval: 5s
+
+    rule_files:
+      - alert.rules
+
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+                - alertmanager-clusterip:9093
+
     scrape_configs:
       - job_name: "catalogo-carro-job"
         metrics_path: /metrics
         static_configs:
           - targets:
-              - catalogo-carros-service:80
+              - catalogo-carros-clusterip:80

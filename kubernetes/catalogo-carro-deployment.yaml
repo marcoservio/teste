@@ -14,19 +14,19 @@ spec:
     spec:
       containers:
         - name: catalogo-carros-container
-          image: marcoservio/catalogo-carros:latest
+          image: marcoservio/catalogo-carros:1.0
           ports:
             - containerPort: 80
           livenessProbe:
             httpGet:
-              path: /WeatherForecast
+              path: /swagger
               port: 80
             periodSeconds: 10
             failureThreshold: 3
             initialDelaySeconds: 20
           readinessProbe:
             httpGet:
-              path: /WeatherForecast
+              path: /swagger
               port: 80
             periodSeconds: 10
             failureThreshold: 5

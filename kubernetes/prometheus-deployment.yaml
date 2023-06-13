@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: prometheus-deployment
   labels:
-    app: prometheus-server
+    app: prometheus
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: prometheus-server
+      app: prometheus
   template:
     metadata:
       labels:
-        app: prometheus-server
+        app: prometheus
     spec:
       containers:
-        - name: prometheus
+        - name: prometheus-container
           image: prom/prometheus
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
@@ -27,7 +27,11 @@ spec:
             - containerPort: 9090
           volumeMounts:
             - name: prometheus-config-volume
-              mountPath: /etc/prometheus/
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml
+            - name: prometheus-alert-config-volume
+              mountPath: /etc/prometheus/alert.rules
+              subPath: alert.rules
           resources:
             requests:
               cpu: 200m
@@ -39,3 +43,6 @@ spec:
         - name: prometheus-config-volume
           configMap:
             name: prometheus-config
+        - name: prometheus-alert-config-volume
+          configMap:
+            name: prometheus-alert-config
