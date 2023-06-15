@@ -1,8 +1,12 @@
-Pegar o dash salvo na pasta
-
 Id para dash uteis
 
+Api .net6.0
 17039
 10915
+Pegar o dash salvo no diretorio grafana/dash
 
-juntar todos e fazer um completo
+Kubernetes monitoring
+6417
+
+Nginx
+12708

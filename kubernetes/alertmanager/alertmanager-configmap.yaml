@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: alertmanager-config
+  name: alertmanager-configmap
 data:
   alertmanager.yml: |-
     global:
-      slack_api_url: "https://hooks.slack.com/services/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"
+      slack_api_url: "https://hooks.slack.com/services/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"
 
     templates:
       - "/etc/alertmanager/template/*.tmpl"

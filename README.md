@@ -3,7 +3,7 @@
 
 
 #	API de Catálogo de Carros
-Este é um projeto desenvolvido como parte da demonstração dos meus conhecimentos. 
+Este é um projeto desenvolvido como parte da demonstração dos meus conhecimentos.
 
 A aplicação é uma API que possibilita o gerenciamento de um catálogo de carros, oferecendo funcionalidades para criar, ler, atualizar e excluir registros de carros. Essa API foi containerizada utilizando Docker, o que permite sua execução em ambientes isolados de forma consistente. Além disso, ela pode ser implantada em um cluster Kubernetes, possibilitando a escalabilidade e o gerenciamento eficiente dos recursos.
 
@@ -15,6 +15,8 @@ Em resumo, a aplicação consiste em uma API containerizada com Docker, que gere
 
 ## Tecnologias Utilizadas
 - .NET 6.0
+- Entity Framework Core
+- Identity
 - XUnit
 - MySQL
 - Docker
@@ -23,8 +25,9 @@ Em resumo, a aplicação consiste em uma API containerizada com Docker, que gere
 - Grafana
 - Alertmanager - Slack
 - NGINX
-- CI/CD
-- Git/GitHub/GitLab
+- Git
+- GitHub
+- Jenkins
 
 
 
@@ -44,12 +47,19 @@ kubernetes/ - Contém os arquivos de configuração para implantar a API no Kube
 
 
 ## Funcionalidades
+- Listar todos os carros do catálogo.
+- Buscar um carro por ID.
+- Adicionar um novo carro ao catálogo.
+- Atualizar as informações de um carro existente.
+- Excluir um carro do catálogo.
+- Coleta de métricas do Kubernetes (Kluster), Nginx e API pelo Prometheus.
+- Envio de alertas de erro relacionados à API para o Slack por meio do Alertmanager.
+- Visualização e consulta das métricas no Grafana.
 
-- Listar todos os carros do catálogo
-- Buscar um carro por ID
-- Adicionar um novo carro ao catálogo
-- Atualizar as informações de um carro existente
-- Excluir um carro do catálogo
+
+
+## Documentação da API 
+Para obter mais informações sobre os endpoints e a funcionalidade da API de Catálogo de Carros, consulte a [documentação da API no Postman](https://documenter.getpostman.com/view/22241608/2s93sf1qnf).
 
 
 
@@ -60,61 +70,97 @@ kubernetes/ - Contém os arquivos de configuração para implantar a API no Kube
    docker-compose up -d
    ```
 
-2. Acesse a API em http://localhost/WeatherForecast
+2. Acesse a API em http://localhost/swagger
 
 
 
 ## Implantação no Kubernetes
-
 Certifique-se de que seu cluster Kubernetes esteja em execução e configurado corretamente.
 
-1. Aplique os ConfigMaps:
+1. Crie um namespace para uma melhor organização:
 
    ```bash
-   kubectl apply -f prometheus-config.yaml
-   kubectl apply -f prometheus-alert-config.yaml
-   kubectl apply -f alertmanager-config.yaml
+   kubectl create namespace catalogo-carros
    ```
 
-2. Aplique os Serviços:
+2. Aplique a configurações de metricas do Cluster:
 
    ```bash
-   kubectl apply -f catalogo-carro-clusterip.yaml
-   kubectl apply -f catalogo-carro-nodeport.yaml
-   kubectl apply -f prometheus-nodeport.yaml
-   kubectl apply -f alertmanager-clusterip.yaml
-   kubectl apply -f alertmanager-nodeport.yaml
+   kubectl apply -f kube-state-metrics/
    ```
 
-3. Aplique os Deployments
+3. Aplique os arquivos da API:
+
+   ```bash   
+   kubectl apply -f catalogo-carros/ --namespace=catalogo-carros  
+   ```
+
+4. Aplique os arquivo do Alertmanager:
 
    ```bash
-   kubectl apply -f catalogo-carro-deployment.yaml
-   kubectl apply -f alertmanager-deployment.yaml
-   kubectl apply -f prometheus-deployment.yaml
+   kubectl apply -f alertmanager/ --namespace=catalogo-carros 
    ```
 
-4. Verifique o status da implantação:
+5. Aplique os arquivos do Prometheus
 
    ```bash
-   kubectl get pods
+   kubectl apply -f prometheus/ --namespace=catalogo-carros
    ```
 
-5. Obtenha o IP externo do serviço:
+6. Aplique os arquivos do Grafana
 
-   ```
-   kubectl get svc
-   ```
-
-6. Se o cluster estiver local acessar utilizando o localhost, se estiver na nuvem acessar com o IP gerado do Load Balancer. Porta 31222 API, Porta 30001 Prometheus, Porta 30002 Alertmenager.
-
-   ```http
-   http://localhost:31222
-   http://localhost:30001 
-   http://localhost:30002 
+   ```bash
+   kubectl apply -f grafana/ --namespace=catalogo-carros
    ```
 
-   
+7. Aplique os arquivos do Nginx
+
+   ```bash
+   kubectl apply -f nginx/ --namespace=catalogo-carros
+   ```
+
+8. Você também pode aplicar todos os arquivos de uma vez:
+
+   ```bash
+   kubectl apply -f catalogo-carros/ --namespace=catalogo-carros
+   kubectl apply -f alertmanager/ --namespace=catalogo-carros
+   kubectl apply -f prometheus/ --namespace=catalogo-carros
+   kubectl apply -f grafana/ --namespace=catalogo-carros
+   kubectl apply -f nginx/ --namespace=catalogo-carros
+   ```
+
+9. Verifique o status da implantação:
+
+   ```bash
+   kubectl get pods --namespace=catalogo-carros
+   ```
+
+10. Se o cluster estiver sendo executado localmente, acesse utilizando o endereço localhost. Se estiver na nuvem, utilize o IP gerado pelo Load Balancer(Será necessario criar os arquivos yaml do LoadBalancer). 
+    As portas utilizadas para acesso local são: 30005 para a API, 30001 para o Prometheus, 30002 para o Alertmanager e 30003 para o Grafana.
+
+    Exemplo de URLs de acesso:
+
+    ```
+    http://localhost:30005
+    http://localhost:30001 
+    http://localhost:30002 
+    http://localhost:30003 
+    ```
+
+11. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
+
+    ```
+    kubectl delete deploy alertmanager-deployment catalogo-carros-deployment nginx-deployment prometheus-deployment grafana-deployment nginx-prometheus-exporter --force --namespace=catalogo-carros
+    ```
+
+    
+
+
+## Observações:
+- Para receber mensagens do Alertmanager no Slack, crie um canal para receber os alerts e instale o "incoming-webhook" no Slack escolhendo o canal criado para receber os alerts. Copie a URL do webhook gerada e cole-a no arquivo "alertmanager.yml" (slack_api_url).
+- O ambiente kubernetes pode ser facilmente aplicado em qualquer provedor de nunvem sem muitas alterações. Necessario criar um PVC para armazenar dados do grafana 
+
+
 
 ## Contribuição
 Este projeto foi desenvolvido por:
@@ -131,11 +177,20 @@ Este projeto está licenciado sob a licença MIT.
 
 
 ## Recursos Adicionais
-.NET Documentation
-Docker Documentation
-Kubernetes Documentation
-Prometheus Documentation
-Grafana Documentation
+- [.NET](https://docs.microsoft.com/pt-br/dotnet/)
+- [Entity Framework Core](https://docs.microsoft.com/pt-br/ef/core/)
+- [Identity](https://docs.microsoft.com/pt-br/aspnet/core/security/authentication/)
+- [XUnit](https://xunit.net/)
+- [MySQL](https://dev.mysql.com/doc/)
+- [Docker](https://docs.docker.com/)
+- [Kubernetes](https://kubernetes.io/docs/home/)
+- [Prometheus](https://prometheus.io/docs/)
+- [Grafana](https://grafana.com/docs/)
+- [Alertmanager](https://prometheus.io/docs/alerting/latest/configuration/)
+- [NGINX](https://nginx.org/en/docs/)
+- [Git](https://git-scm.com/doc)
+- [GitHub](https://docs.github.com/en)
+- [Jenkins](https://www.jenkins.io/doc/)
 
 
 
@@ -144,6 +199,12 @@ Grafana Documentation
 
 - GitHub: [marcoservio](https://github.com/marcoservio)
 
-  
+- LinkedIn: [Marco Servio](https://www.linkedin.com/in/marco-sérvio-366b2b137/)
+
+
+
+Se você tiver alguma dúvida, sugestão ou quiser se conectar profissionalmente, sinta-se à vontade para entrar em contato por e-mail ou me encontrar no LinkedIn.
+
+
 
 Agradeço por visitar este repositório e por verificar meu projeto de Catálogo de Carros em .NET 6.0

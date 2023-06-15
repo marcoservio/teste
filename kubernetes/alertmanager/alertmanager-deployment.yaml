@@ -33,4 +33,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: alertmanager-config
+            name: alertmanager-configmap

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-conf-proxy
+              mountPath: /etc/nginx/conf.d/proxy.conf
+              subPath: proxy.conf
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200M
+            limits:
+              cpu: 500m
+              memory: 500M
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-configmap
+        - name: nginx-conf-proxy
+          configMap:
+            name: nginx-proxy-configmap

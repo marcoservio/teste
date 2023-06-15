@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: prometheus-config-volume
           configMap:
-            name: prometheus-config
+            name: prometheus-configmap
         - name: prometheus-alert-config-volume
           configMap:
-            name: prometheus-alert-config
+            name: prometheus-alert-configmap
