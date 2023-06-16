@@ -1,0 +1,12 @@
+Id para dash uteis
+
+Api .net6.0
+17039
+10915
+Pegar o dash salvo no diretorio grafana/dash
+
+Kubernetes monitoring
+6417
+
+Nginx
+12708

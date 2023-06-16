@@ -1,0 +1,4 @@
+criar um canal para receber os alerts
+instalar no slack incoming-webhook
+copiar a URL do webhook
+colar a url copiada no arquivo do alertmaneger.yml

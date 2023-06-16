@@ -1,0 +1,121 @@
+version: "3.9"
+
+networks:
+  database:
+    internal: true
+  api:
+    internal: true
+  monit:
+  proxy:
+
+
+services:
+  mysql-catalogo-api:
+    image: mysql
+    container_name: mysql-catalogo-api
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: 'forum'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+    expose:
+      - 3306
+    networks:
+      - database
+
+  app-catalogo-api:
+    build:
+      context: ./src/
+      dockerfile: Dockerfile
+      args:
+        version: 1
+    image: app-catalogo-api
+    container_name: app-catalogo-api
+    networks:
+      - api
+      - database
+    healthcheck:
+      test: "curl -sS http://app-catalogo-api/swagger"
+      interval: 1s
+      timeout: 30s
+      retries: 60
+    depends_on:
+      - mysql-catalogo-api
+
+  proxy-catalogo-api:
+    image: nginx
+    container_name: proxy-catalogo-api
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
+    ports:
+      - 80:80
+    networks:
+      - proxy
+      - api
+    depends_on:
+      - app-catalogo-api
+
+  prometheus-catalogo-api:
+    image: prom/prometheus
+    container_name: prometheus-catalogo-api
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.rules:/etc/prometheus/alert.rules
+      - ./prometheus/data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+    networks:
+      - monit
+      - api
+    depends_on:
+      - proxy-catalogo-api
+
+  alertmanager-catalogo-api:
+    image: prom/alertmanager
+    container_name: alertmanager-catalogo-api
+    volumes:
+      - ./alertmanager:/etc/alertmanager/:ro
+    ports:
+      - 9093:9093
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+    networks:
+      - monit
+    depends_on:
+      - prometheus-catalogo-api
+
+  grafana-catalogo-api:
+    image: grafana/grafana
+    container_name: grafana-catalogo-api
+    volumes:
+      - ./grafana:/var/lib/grafana
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - monit
+    depends_on:
+      - alertmanager-catalogo-api
+
+  client-catalogo-api:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    image: client-catalogo-api
+    container_name: client-catalogo-api
+    restart: unless-stopped
+    networks:
+      - proxy
+    depends_on:
+      - grafana-catalogo-api

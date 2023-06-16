@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus-container
+          image: prom/prometheus
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+            - "--web.console.libraries=/etc/prometheus/console_libraries"
+            - "--web.console.templates=/etc/prometheus/consoles"
+            - "--web.enable-lifecycle"
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml
+            - name: prometheus-alert-config-volume
+              mountPath: /etc/prometheus/alert.rules
+              subPath: alert.rules
+          resources:
+            requests:
+              cpu: 50m
+              memory: 200M
+            limits:
+              cpu: 100m
+              memory: 400M
+      volumes:
+        - name: prometheus-config-volume
+          configMap:
+            name: prometheus-configmap
+        - name: prometheus-alert-config-volume
+          configMap:
+            name: prometheus-alert-configmap

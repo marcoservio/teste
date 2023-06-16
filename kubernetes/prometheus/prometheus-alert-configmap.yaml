@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-configmap
+data:
+  alert.rules: |-
+    groups:
+    - name: ops-catalogo-carro
+      rules:
+      - alert: 'ERRO 404'
+        expr: (sum(rate(http_request_duration_seconds_count{code="404"}[1m])) / sum(rate(http_request_duration_seconds_count{}[1m]))) >= 0.01
+        for: 1m
+        labels:
+          app: 'app-catalogo-carro'
+          severity: 'critical'
+          group: 'ops-catalogo-carro'
+          env: 'production'
+        annotations:
+          title: 'ERRO 404'
+          summary: 'Erro 404 acima de 1% no último minuto.'
+          description: 'API catalogo carros esta com taxa de erros 404 esta acima de 1% no último minuto'
+
+    - name: devopscube demo alert
+      rules:
+      - alert: High Pod Memory
+        expr: sum(container_memory_usage_bytes) > 1
+        for: 1m
+        labels:
+          app: 'app-catalogo-carro'
+          severity: 'critical'
+          group: 'ops-catalogo-carro'
+          env: 'production'
+        annotations:
+          title: 'Alto uso de memória'
+          summary: Alto uso de memória do Cluster
+          description: 'Cluster está usando mais memoria do que o limite'
