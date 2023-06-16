@@ -25,11 +25,11 @@ spec:
               subPath: alertmanager.yml
           resources:
             requests:
-              cpu: 200m
-              memory: 200M
+              cpu: 15m
+              memory: 50M
             limits:
-              cpu: 500m
-              memory: 500M
+              cpu: 30m
+              memory: 100M
       volumes:
         - name: config-volume
           configMap:

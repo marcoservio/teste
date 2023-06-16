@@ -119,38 +119,44 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
    kubectl apply -f nginx/ --namespace=catalogo-carros
    ```
 
-8. Você também pode aplicar todos os arquivos de uma vez:
+8. Aplique os arquivos do Client
 
    ```bash
+   kubectl apply -f client/ --namespace=catalogo-carros
+   ```
+
+9. Você também pode aplicar todos os arquivos de uma vez:
+
+   ```bash
+   kubectl create namespace catalogo-carros
+   kubectl apply -f kube-state-metrics/
    kubectl apply -f catalogo-carros/ --namespace=catalogo-carros
    kubectl apply -f alertmanager/ --namespace=catalogo-carros
    kubectl apply -f prometheus/ --namespace=catalogo-carros
    kubectl apply -f grafana/ --namespace=catalogo-carros
    kubectl apply -f nginx/ --namespace=catalogo-carros
+   kubectl apply -f client/ --namespace=catalogo-carros
    ```
 
-9. Verifique o status da implantação:
-
-   ```bash
-   kubectl get pods --namespace=catalogo-carros
-   ```
-
-10. Se o cluster estiver sendo executado localmente, acesse utilizando o endereço localhost. Se estiver na nuvem, utilize o IP gerado pelo Load Balancer(Será necessario criar os arquivos yaml do LoadBalancer). 
-    As portas utilizadas para acesso local são: 30005 para a API, 30001 para o Prometheus, 30002 para o Alertmanager e 30003 para o Grafana.
-
-    Exemplo de URLs de acesso:
+10. Verifique o status da implantação:
 
     ```
-    http://localhost:30005
-    http://localhost:30001 
-    http://localhost:30002 
-    http://localhost:30003 
+    kubectl get pods --namespace=catalogo-carros
     ```
 
-11. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
+11. As portas utilizadas para acesso aos serviços são: 
+
+   - 80 para a API.
+   - 9090 para o Prometheus.
+   - 9093 para o Alertmanager.
+   - 3000 para o Grafana.
+
+12. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
 
     ```
-    kubectl delete deploy alertmanager-deployment catalogo-carros-deployment nginx-deployment prometheus-deployment grafana-deployment nginx-prometheus-exporter --force --namespace=catalogo-carros
+    kubectl delete deploy alertmanager-deployment catalogo-carros-deployment nginx-deployment prometheus-deployment grafana-deployment nginx-prometheus-exporter-deployment client-deployment --force --namespace=catalogo-carros
+    #ou
+    kubectl delete namespace catalogo-carros
     ```
 
     
@@ -158,7 +164,7 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
 
 ## Observações:
 - Para receber mensagens do Alertmanager no Slack, crie um canal para receber os alerts e instale o "incoming-webhook" no Slack escolhendo o canal criado para receber os alerts. Copie a URL do webhook gerada e cole-a no arquivo "alertmanager.yml" (slack_api_url).
-- O ambiente kubernetes pode ser facilmente aplicado em qualquer provedor de nunvem sem muitas alterações. Necessario criar um PVC para armazenar dados do grafana 
+- O ambiente kubernetes pode ser facilmente aplicado em qualquer provedor de nunvem sem muitas alterações.
 
 
 

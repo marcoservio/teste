@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-prometheus-exporter
+  name: nginx-prometheus-exporter-deployment
 spec:
   replicas: 1
   selector:
@@ -13,7 +13,7 @@ spec:
         app: nginx-prometheus-exporter
     spec:
       containers:
-        - name: nginx-prometheus-exporter
+        - name: nginx-prometheus-exporter-container
           image: nginx/nginx-prometheus-exporter:latest
           ports:
             - containerPort: 9113
