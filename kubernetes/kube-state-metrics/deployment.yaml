@@ -39,11 +39,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: 500M
-              cpu: "1000m"
+              cpu: "10m"
+              memory: 100M
             limits:
-              memory: "1Gi"
-              cpu: "1000m"
+              cpu: "20m"
+              memory: "200M"
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: kube-state-metrics

@@ -33,8 +33,8 @@ spec:
             initialDelaySeconds: 3
           resources:
             requests:
-              cpu: 200m
-              memory: 200M
+              cpu: 50m
+              memory: 100M
             limits:
-              cpu: 500m
-              memory: 500M
+              cpu: 100m
+              memory: 200M

@@ -34,11 +34,11 @@ spec:
               subPath: alert.rules
           resources:
             requests:
-              cpu: 200m
+              cpu: 50m
               memory: 200M
             limits:
-              cpu: 500m
-              memory: 500M
+              cpu: 100m
+              memory: 400M
       volumes:
         - name: prometheus-config-volume
           configMap:
