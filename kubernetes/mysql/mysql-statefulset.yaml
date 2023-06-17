@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        name: mysql
+        app: mysql
     spec:
       containers:
         - name: mysql-container

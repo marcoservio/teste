@@ -15,7 +15,7 @@ services:
     container_name: mysql-catalogo-api
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: 'forum'
+      MYSQL_DATABASE: 'carro'
       MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'root'
     volumes:

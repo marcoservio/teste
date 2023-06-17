@@ -113,19 +113,25 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
    kubectl apply -f grafana/ --namespace=catalogo-carros
    ```
 
-7. Aplique os arquivos do Nginx
+8. Aplique os arquivos do MySql
+
+   ```bash
+   kubectl apply -f mysql/ --namespace=catalogo-carros
+   ```
+
+9. Aplique os arquivos do Nginx
 
    ```bash
    kubectl apply -f nginx/ --namespace=catalogo-carros
    ```
 
-8. Aplique os arquivos do Client
+10. Aplique os arquivos do Client
 
    ```bash
    kubectl apply -f client/ --namespace=catalogo-carros
    ```
 
-9. Você também pode aplicar todos os arquivos de uma vez:
+11. Você também pode aplicar todos os arquivos de uma vez:
 
    ```bash
    kubectl create namespace catalogo-carros
@@ -134,27 +140,29 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
    kubectl apply -f alertmanager/ --namespace=catalogo-carros
    kubectl apply -f prometheus/ --namespace=catalogo-carros
    kubectl apply -f grafana/ --namespace=catalogo-carros
+   kubectl apply -f mysql/ --namespace=catalogo-carros
    kubectl apply -f nginx/ --namespace=catalogo-carros
    kubectl apply -f client/ --namespace=catalogo-carros
    ```
 
-10. Verifique o status da implantação:
+12. Verifique o status da implantação:
 
     ```
     kubectl get pods --namespace=catalogo-carros
     ```
 
-11. As portas utilizadas para acesso aos serviços são: 
+13. As portas utilizadas para acesso aos serviços são: 
 
    - 80 para a API.
    - 9090 para o Prometheus.
    - 9093 para o Alertmanager.
    - 3000 para o Grafana.
 
-12. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
+14. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
 
     ```
     kubectl delete deploy alertmanager-deployment catalogo-carros-deployment nginx-deployment prometheus-deployment grafana-deployment nginx-prometheus-exporter-deployment client-deployment --force --namespace=catalogo-carros
+    kubectl delete statefulset mysql-statefulset --force --namespace=catalogo-carros
     #ou
     kubectl delete namespace catalogo-carros
     ```
