@@ -23,10 +23,6 @@ spec:
               value: "root"
             - name: MYSQL_DATABASE
               value: "carro"
-            - name: MYSQL_USER
-              value: "root"
-            - name: MYSQL_PASSWORD
-              value: "root"
           volumeMounts:
             - name: volume-mysql
               mountPath: /var/lib/mysql

@@ -173,6 +173,7 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
 ## Observações:
 - Para receber mensagens do Alertmanager no Slack, crie um canal para receber os alerts e instale o "incoming-webhook" no Slack escolhendo o canal criado para receber os alerts. Copie a URL do webhook gerada e cole-a no arquivo "alertmanager.yml" (slack_api_url).
 - O ambiente kubernetes pode ser facilmente aplicado em qualquer provedor de nunvem sem muitas alterações.
+- As métricas do kubernetes/prometheus podem ter algumas limitações ao serem executadas em um ambiente de nuvem.
 
 
 
