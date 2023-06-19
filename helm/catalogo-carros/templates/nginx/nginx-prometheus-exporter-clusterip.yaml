@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-prometheus-exporter-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-prometheus-exporter
+  ports:
+    - protocol: TCP
+      port: 9113
