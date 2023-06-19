@@ -21,6 +21,7 @@ Em resumo, a aplicação consiste em uma API containerizada com Docker, que gere
 - MySQL
 - Docker
 - Kubernetes
+- Helm
 - Prometheus
 - Grafana
 - Alertmanager - Slack
@@ -77,103 +78,72 @@ Para obter mais informações sobre os endpoints e a funcionalidade da API de Ca
 ## Implantação no Kubernetes
 Certifique-se de que seu cluster Kubernetes esteja em execução e configurado corretamente.
 
-1. Crie um namespace para uma melhor organização:
+1. Entre no diretorio kubernetes e executar os comandos:
 
    ```bash
-   kubectl create namespace catalogo-carros
-   ```
-
-2. Aplique a configurações de metricas do Cluster:
-
-   ```bash
+   kubectl create ns catalogo-carros
    kubectl apply -f kube-state-metrics/
+   kubectl apply -f catalogo-carros/ -n catalogo-carros
+   kubectl apply -f alertmanager/ -n catalogo-carros
+   kubectl apply -f prometheus/ -n catalogo-carros
+   kubectl apply -f grafana/ -n catalogo-carros
+   kubectl apply -f mysql/ -n catalogo-carros
+   kubectl apply -f nginx/ -n catalogo-carros
+   kubectl apply -f client/ -n catalogo-carros
    ```
 
-3. Aplique os arquivos da API:
+2. Verifique o status da implantação:
 
-   ```bash   
-   kubectl apply -f catalogo-carros/ --namespace=catalogo-carros  
+   ```
+   kubectl get pods -n catalogo-carros
    ```
 
-4. Aplique os arquivo do Alertmanager:
-
-   ```bash
-   kubectl apply -f alertmanager/ --namespace=catalogo-carros 
-   ```
-
-5. Aplique os arquivos do Prometheus
-
-   ```bash
-   kubectl apply -f prometheus/ --namespace=catalogo-carros
-   ```
-
-6. Aplique os arquivos do Grafana
-
-   ```bash
-   kubectl apply -f grafana/ --namespace=catalogo-carros
-   ```
-
-8. Aplique os arquivos do MySql
-
-   ```bash
-   kubectl apply -f mysql/ --namespace=catalogo-carros
-   ```
-
-9. Aplique os arquivos do Nginx
-
-   ```bash
-   kubectl apply -f nginx/ --namespace=catalogo-carros
-   ```
-
-10. Aplique os arquivos do Client
-
-   ```bash
-   kubectl apply -f client/ --namespace=catalogo-carros
-   ```
-
-11. Você também pode aplicar todos os arquivos de uma vez:
-
-   ```bash
-   kubectl create namespace catalogo-carros
-   kubectl apply -f kube-state-metrics/
-   kubectl apply -f catalogo-carros/ --namespace=catalogo-carros
-   kubectl apply -f alertmanager/ --namespace=catalogo-carros
-   kubectl apply -f prometheus/ --namespace=catalogo-carros
-   kubectl apply -f grafana/ --namespace=catalogo-carros
-   kubectl apply -f mysql/ --namespace=catalogo-carros
-   kubectl apply -f nginx/ --namespace=catalogo-carros
-   kubectl apply -f client/ --namespace=catalogo-carros
-   ```
-
-12. Verifique o status da implantação:
-
-    ```
-    kubectl get pods --namespace=catalogo-carros
-    ```
-
-13. As portas utilizadas para acesso aos serviços são: 
+3. As portas utilizadas para acesso aos serviços são: 
 
    - 80 para a API.
    - 9090 para o Prometheus.
    - 9093 para o Alertmanager.
    - 3000 para o Grafana.
 
-14. Caso seja necessário, você pode excluir todos os pods de uma vez usando o seguinte comando:
+4. Caso seja necessário, você pode excluir tudo:
 
-    ```
-    kubectl delete deploy alertmanager-deployment catalogo-carros-deployment nginx-deployment prometheus-deployment grafana-deployment nginx-prometheus-exporter-deployment client-deployment --force --namespace=catalogo-carros
-    kubectl delete statefulset mysql-statefulset --force --namespace=catalogo-carros
-    #ou
-    kubectl delete namespace catalogo-carros
-    ```
+   ```
+   kubectl delete namespace catalogo-carros
+   ```
 
-    
+
+
+## Implantação no Kubernetes Pelo Helm
+Certifique-se de que seu cluster Kubernetes e o Helm esteja em execução e configurado corretamente.
+
+1. Configure o value, passando o link correto do webhook do slack
+
+2. Entre no diretorio helm e execute os comandos:
+
+   ```bash
+   kubectl create ns catalogo-carros
+   helm install catalogo-carros catalogo-carros/ -n catalogo-carros
+   ```
+
+2. Verifique o status da implantação:
+
+   ```
+   kubectl get pods -n catalogo-carros
+   ````
+
+4. Caso seja necessário, você pode excluir tudo:
+
+   ```
+   helm uninstall catalogo-carros -n catalogo-carros
+   kubectl delete namespace catalogo-carros
+   ```
+
 
 
 ## Observações:
 - Para receber mensagens do Alertmanager no Slack, crie um canal para receber os alerts e instale o "incoming-webhook" no Slack escolhendo o canal criado para receber os alerts. Copie a URL do webhook gerada e cole-a no arquivo "alertmanager-configmap.yaml" (slack_api_url).
 - O ambiente kubernetes pode ser facilmente aplicado em qualquer provedor de nunvem sem muitas alterações.
-- As métricas do kubernetes/prometheus podem ter algumas limitações ao serem executadas em um ambiente de nuvem.
+- As métricas do kubernetes/prometheus podem ter algumas limitações ao serem executadas em um ambiente de nuvem ou pelo helm.
 
 
 
@@ -199,6 +169,7 @@ Este projeto está licenciado sob a licença MIT.
 - [MySQL](https://dev.mysql.com/doc/)
 - [Docker](https://docs.docker.com/)
 - [Kubernetes](https://kubernetes.io/docs/home/)
+- [Helm](https://helm.sh/docs/)
 - [Prometheus](https://prometheus.io/docs/)
 - [Grafana](https://grafana.com/docs/)
 - [Alertmanager](https://prometheus.io/docs/alerting/latest/configuration/)

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogo-carros-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalogo-carros
+  template:
+    metadata:
+      labels:
+        app: catalogo-carros
+    spec:
+      containers:
+        - name: catalogo-carros-container
+          image: marcoservio/catalogo-carros:1.0
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /swagger
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /swagger
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
