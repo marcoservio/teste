@@ -65,7 +65,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    dockerapp = docker.build("marcoservio/catalogo-carros:1.1.${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
+                    dockerapp = docker.build("marcoservio/catalogo-carros:${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
                 }
             }
         }
@@ -75,7 +75,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
                         dockerapp.push('latest')
-                        dockerapp.push("${env.BUILD_ID}")
+                        dockerapp.push("1.1.${env.BUILD_ID}")
                     }
                 }
             }
