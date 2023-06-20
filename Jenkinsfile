@@ -2,7 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout API') {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+
+        stage('Checkout') {
             steps {
                 git 'https://github.com/marcoservio/catalogo-carros.git'
             }
