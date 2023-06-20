@@ -33,7 +33,7 @@ pipeline {
         stage('Start MySQL Docker') {
             steps {
                 dir('src') {
-                    sh 'docker-compose up -d mysql'
+                    sh 'docker-compose up -d'
                 }
             }
         }
