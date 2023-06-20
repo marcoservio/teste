@@ -55,23 +55,28 @@ pipeline {
         }
 
         stage('Publish') {
-            environment {
-                // Definir as variáveis de ambiente necessárias para o push no Docker Hub
-                registry = 'marcoservio/catalogo-carros'
-                dockerImage = ''
-            }
             steps {
-                // Construir a imagem Docker
-                sh 'dotnet publish -c Release -o publish'
-                sh 'docker build -t $registry:$BUILD_NUMBER .'
-                
-                // Fazer login no Docker Hub
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                dir('src') {
+                    sh 'dotnet publish -c Release -o publish'
                 }
-                
-                // Fazer o push da imagem Docker para o Docker Hub
-                sh 'docker push $registry:$BUILD_NUMBER'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    dockerapp = docker.build("marcoservio/catalogo-carros:${env.BUILD_ID}", -f './src/Dockerfile .')
+                }
+            }
+        }
+
+        stage('Docker Push Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub')
+                    dockerapp.push('latest')
+                    dockerapp.push("${env.BUILD_ID}")
+                }
             }
         }
     }
