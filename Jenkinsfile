@@ -10,7 +10,7 @@ pipeline {
 
         stage('Restore') {
             steps {
-                 dir('src') {                    
+                dir('src') {                    
                     sh 'dotnet restore'
                 }
             }
@@ -18,13 +18,17 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'dotnet build'
+                dir('src') {
+                    sh 'dotnet build'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'dotnet test'
+                dir('src') {
+                    sh 'dotnet test'
+                }
             }
         }
 
