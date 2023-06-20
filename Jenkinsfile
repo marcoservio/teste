@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Start MySQL Docker') {
+        stage('Up MySQL') {
             steps {
                 dir('src') {
                     sh 'docker-compose up -d'
@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('Cleanup Docker') {
+        stage('Down MySQL') {
             steps {
                 dir('src') {
                     sh 'docker-compose down'
@@ -70,7 +70,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push Image') {
+        stage('Docker Push') {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
