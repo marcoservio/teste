@@ -65,7 +65,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    dockerapp = docker.build("marcoservio/catalogo-carros:${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
+                    dockerapp = docker.build("marcoservio/catalogo-carros:1.1.${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
                 }
             }
         }
