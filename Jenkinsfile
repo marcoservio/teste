@@ -22,14 +22,6 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                dir('src') {
-                    sh 'dotnet build'
-                }
-            }
-        }
-
         stage('Up MySQL') {
             steps {
                 dir('src') {
@@ -53,6 +45,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Build') {
+            steps {
+                dir('src') {
+                    sh 'dotnet build'
+                }
+            }
+        }        
 
         stage('Publish') {
             steps {
