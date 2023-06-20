@@ -1,0 +1,20 @@
+version: "3.9"
+
+networks:
+  database:
+
+
+services:
+  mysql-catalogo-api:
+    image: mysql
+    container_name: mysql-catalogo-api
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: 'carro'
+    volumes:
+      - .././mysql:/docker-entrypoint-initdb.d
+    ports:
+      - 3310:3306
+    networks:
+      - database
