@@ -10,7 +10,9 @@ pipeline {
 
         stage('Restore') {
             steps {
-                sh 'dotnet restore'
+                 dir('catalogo-carro/src') {                    
+                    sh 'dotnet restore'
+                }
             }
         }
 
