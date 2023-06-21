@@ -195,7 +195,7 @@ pipeline {
         
         stage('Notificando') {
             steps {
-                slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger ', tokenCredentialId: 'slack-token')
+                slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger/index.html ', tokenCredentialId: 'slack-token')
             }
         }
     }
