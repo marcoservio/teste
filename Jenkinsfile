@@ -125,7 +125,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Build API') {
             steps {
                 script {
                     try {
@@ -140,7 +140,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
+        stage('Docker Push API') {
             steps {
                 script {
                     try {                    
