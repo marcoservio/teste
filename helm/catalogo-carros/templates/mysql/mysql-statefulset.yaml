@@ -17,7 +17,7 @@ spec:
         - name: mysql-container
           image: mysql
           ports:
-            - containerPort: 3306
+            - containerPort: 3310
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "root"
