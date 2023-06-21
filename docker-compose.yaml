@@ -20,7 +20,7 @@ services:
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
     expose:
-      - 3306
+      - 3310
     networks:
       - database
 
