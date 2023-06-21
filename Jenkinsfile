@@ -165,7 +165,7 @@ pipeline {
                         try {                    
                             sh 'helm uninstall -n catalogo-carros catalogo-carros catalogo-carros'
                         } catch (Exception e) {
-                                slackSend (color: 'error', message: "[ FALHA ] Não foi possivel derrubar a API - ${BUILD_URL} em ${currentBuild.duration}s", tokenCredentialId: 'slack-token')
+                                slackSend (color: 'error', message: "[ FALHA ] Não foi possivel derrubar a API - ${BUILD_URL} em ${currentBuild.durationString}", tokenCredentialId: 'slack-token')
                                 sh "echo $e"
                                 currentBuild.result = 'ABORTED'
                                 error('Erro')
