@@ -164,7 +164,7 @@ pipeline {
                     dir('helm') {
                         try {      
                             withKubeConfig([credentialsId: 'kube-config']) {        
-                                sh 'helm uninstall -n catalogo-carros catalogo-carros'
+                                sh 'helm uninstall catalogo-carros'
                             }
                         } catch (Exception e) {
                                 sh "echo $e"
@@ -180,7 +180,7 @@ pipeline {
                     dir('helm') {
                         try {       
                             withKubeConfig([credentialsId: 'kube-config']) {
-                               sh 'helm install -n catalogo-carros catalogo-carros catalogo-carros'
+                               sh 'helm install catalogo-carros catalogo-carros/'
                             }
                         } catch (Exception e) {
                                 slackSend (color: 'error', message: "[ FALHA ] Não foi possivel subir a API - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')

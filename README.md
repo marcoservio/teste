@@ -122,20 +122,19 @@ Certifique-se de que seu cluster Kubernetes e o Helm esteja em execução e conf
 
    ```bash
    kubectl create ns catalogo-carros
-   helm install catalogo-carros catalogo-carros/ -n catalogo-carros
+   helm install catalogo-carros catalogo-carros/
    ```
 
 2. Verifique o status da implantação:
 
    ```
-   kubectl get pods -n catalogo-carros
+   kubectl get pods
    ````
 
 4. Caso seja necessário, você pode excluir tudo:
 
    ```
-   helm uninstall catalogo-carros -n catalogo-carros
-   kubectl delete namespace catalogo-carros
+   helm uninstall catalogo-carros
    ```
 
 
