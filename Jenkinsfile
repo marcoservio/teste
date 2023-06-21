@@ -162,8 +162,10 @@ pipeline {
             steps {
                 script {
                     dir('helm') {
-                        try {                    
-                            sh 'helm uninstall -n catalogo-carros catalogo-carros'
+                        try {      
+                            withKubeConfing([credentialId: 'kube-config']) {        
+                                sh 'helm uninstall -n catalogo-carros catalogo-carros'
+                            }
                         } catch (Exception e) {
                                 sh "echo $e"
                         }
@@ -176,8 +178,10 @@ pipeline {
             steps {
                 script {
                     dir('helm') {
-                        try {                    
-                            sh 'helm install -n catalogo-carros catalogo-carros catalogo-carros'
+                        try {       
+                            withKubeConfing([credentialId: 'kube-config']) {
+                               sh 'helm install -n catalogo-carros catalogo-carros catalogo-carros'
+                            }
                         } catch (Exception e) {
                                 slackSend (color: 'error', message: "[ FALHA ] Não foi possivel subir a API - ${BUILD_URL} em ${currentBuild.duration}s", tokenCredentialId: 'slack-token')
                                 sh "echo $e"
@@ -191,7 +195,7 @@ pipeline {
         
         stage('Notificando') {
             steps {
-                slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://192.168.33.10:81/ ', tokenCredentialId: 'slack-token')
+                slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger ', tokenCredentialId: 'slack-token')
             }
         }
     }
