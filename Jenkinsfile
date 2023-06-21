@@ -163,7 +163,7 @@ pipeline {
                 script {
                     dir('helm') {
                         try {      
-                            withKubeConfing([credentialId: 'kube-config']) {        
+                            withKubeConfing([credentialsId: 'kube-config']) {        
                                 sh 'helm uninstall -n catalogo-carros catalogo-carros'
                             }
                         } catch (Exception e) {
@@ -179,7 +179,7 @@ pipeline {
                 script {
                     dir('helm') {
                         try {       
-                            withKubeConfing([credentialId: 'kube-config']) {
+                            withKubeConfing([credentialsId: 'kube-config']) {
                                sh 'helm install -n catalogo-carros catalogo-carros catalogo-carros'
                             }
                         } catch (Exception e) {
