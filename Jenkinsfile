@@ -89,18 +89,7 @@ pipeline {
                     }
                 }
             }
-        }
-
-        stage('Sonar UP?') {
-            steps {
-                script {
-                    slackSend (color: 'warning', message: "Para continuar inicialize o Sonar. Acesse: ${JOB_URL}", tokenCredentialId: 'slack-token')
-                    timeout(time: 10, unit: 'MINUTES') {
-                        input(id: 'deploy-gate', message: 'Ready to go?', ok: 'Ok')
-                    }
-                }
-            }
-        }
+        }       
 
         stage('Build') {
             steps {
@@ -117,7 +106,44 @@ pipeline {
                     }
                 }
             }
-        }        
+        } 
+
+        // stage('Sonar UP?') {
+        //     steps {
+        //         script {
+        //             slackSend (color: 'warning', message: "Para continuar inicialize o Sonar. Acesse [Janela de 5 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
+        //             timeout(time: 5, unit: 'MINUTES') {
+        //                 input(id: 'deploy-gate', message: 'Ready to go?', ok: 'Ok')
+        //             }
+        //         }
+        //     }
+        // }       
+
+        stage('Up Sonar') {
+            steps {
+                script {
+                    dir('sonarqube') {
+                        try {
+                            sh 'docker-compose down'
+                        } catch (Exception e) {
+                            sh "echo $e"
+                        }
+                    }
+                },
+                script {
+                    dir('sonarqube') {
+                        try {
+                            sh 'docker-compose up -d'
+                        } catch (Exception e) {
+                            slackSend (color: 'error', message: "[ FALHA ] Não foi possivel fazer subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
+                            sh "echo $e"
+                            currentBuild.result = 'ABORTED'
+                            error('Erro')
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Publish') {
             steps {
