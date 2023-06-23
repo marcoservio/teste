@@ -125,7 +125,7 @@ pipeline {
                     dir('src') {
                         try {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.token="${SONAR_TOKEN} /d:sonar.verbose=true"'
+                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.verbose=true /d:sonar.token="${SONAR_TOKEN}"'
                                 sh 'sudo dotnet build'
                                 sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner end /d:sonar.token="${SONAR_TOKEN}"'
                             }
@@ -223,12 +223,7 @@ pipeline {
         stage('Notificando') {
             steps {
                 slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger/index.html ', tokenCredentialId: 'slack-token')
-            }
-        }
-
-        stage('Limpar Workspace') {
-            steps {
-                sh 'sudo rm -rf *'
+                cleanWs()
             }
         }
     }
