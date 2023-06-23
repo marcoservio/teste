@@ -8,6 +8,7 @@
 sonarqube_data/
 sonarqube_extensions/
 sonarqube_logs/
+src/.sonarqube
 
 # User-specific files
 *.suo

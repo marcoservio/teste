@@ -225,5 +225,11 @@ pipeline {
                 slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger/index.html ', tokenCredentialId: 'slack-token')
             }
         }
+
+        stage('Limpar Workspace') {
+            steps {
+                sudo sh 'rm -rf *'
+            }
+        }
     }
 }
