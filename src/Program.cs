@@ -5,8 +5,6 @@ using Microsoft.OpenApi.Models;
 
 using Prometheus;
 
-using System.Reflection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("CarroConnection");
