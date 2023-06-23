@@ -94,10 +94,8 @@ pipeline {
         stage('Sonar UP?') {
             steps {
                 script {
-                    slackSend (color: 'warning', message: "Para continuar inicialize o Sonar. Acesse [Janela de 10 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
-                    timeout(time: 10, unit: 'MINUTES') {
-                        input(id: "Deploy Gate", message: "Sonar UP?", ok: 'Continue')
-                    }
+                    slackSend (color: 'warning', message: "Para continuar inicialize o Sonar. Acesse: ${JOB_URL}", tokenCredentialId: 'slack-token')
+                    input(id: "Deploy Gate", message: "Ready to go?", ok: 'Ok')
                 }
             }
         }
