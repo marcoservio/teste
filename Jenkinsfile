@@ -125,7 +125,7 @@ pipeline {
                     dir('src') {
                         try {
                             withSonarQubeEnv('SonarQube') {
-                                sh 'dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="${env.SONAR_HOST_URL}" /d:sonar.login="${env.sonar-token}"'
+                                sh 'dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="${env.SONAR_HOST_URL}" /d:sonar.login="${env.SONAR_TOKEN}"'
                                 sh 'dotnet build'
                                 sh 'dotnet sonarscanner end /d:sonar.login="${env.SONAR_TOKEN}"'
                             }
@@ -139,32 +139,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Up Sonar') {
-        //     steps {
-        //         script {
-        //             dir('sonarqube') {
-        //                 try {
-        //                     sh 'docker-compose down'
-        //                 } catch (Exception e) {
-        //                     sh "echo $e"
-        //                 }
-        //             }
-        //         }
-        //         script {
-        //             dir('sonarqube') {
-        //                 try {
-        //                     sh 'docker-compose up -d'
-        //                 } catch (Exception e) {
-        //                     slackSend (color: 'error', message: "[ FALHA ] Não foi possivel fazer subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
-        //                     sh "echo $e"
-        //                     currentBuild.result = 'ABORTED'
-        //                     error('Erro')
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
 
         stage('Publish') {
             steps {
