@@ -126,9 +126,9 @@ pipeline {
                         try {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                                 withSonarQubeEnv('SonarQube') {
-                                    sh '/root/.dotnet/tools/dotnet-sonarscanner dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}"'
+                                    sh 'sudo /root/.dotnet/tools/dotnet-sonarscanner dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}"'
                                     sh 'dotnet build'
-                                    sh '/root/.dotnet/tools/dotnet-sonarscanner dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
+                                    sh 'sudo /root/.dotnet/tools/dotnet-sonarscanner dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
                                 }
                             }
                         } catch (Exception e) {
