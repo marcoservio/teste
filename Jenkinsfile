@@ -47,7 +47,7 @@ pipeline {
                         try {
                             sh 'docker-compose up -d'
                         } catch (Exception e) {
-                            slackSend (color: 'error', message: "[ FALHA ] Não foi possivel fazer subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
+                            slackSend (color: 'error', message: "[ FALHA ] Não foi possivel subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
                             sh "echo $e"
                             currentBuild.result = 'ABORTED'
                             error('Erro')
@@ -118,24 +118,19 @@ pipeline {
         //         }
         //     }
         // }       
-
-        stage('Up Sonar') {
+        
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    dir('sonarqube') {
+                    dir('src') {
                         try {
-                            sh 'docker-compose down'
+                            withSonarQubeEnv('SonarQube') {
+                                sh 'dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="${env.SONAR_HOST_URL}" /d:sonar.login="${env.sonar-token}"'
+                                sh 'dotnet build'
+                                sh 'dotnet sonarscanner end /d:sonar.login="${env.SONAR_TOKEN}"'
+                            }
                         } catch (Exception e) {
-                            sh "echo $e"
-                        }
-                    }
-                }
-                script {
-                    dir('sonarqube') {
-                        try {
-                            sh 'docker-compose up -d'
-                        } catch (Exception e) {
-                            slackSend (color: 'error', message: "[ FALHA ] Não foi possivel fazer subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
+                            slackSend (color: 'error', message: "[ FALHA ] Erro ao executar o SonarQube Analysis - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
                             sh "echo $e"
                             currentBuild.result = 'ABORTED'
                             error('Erro')
@@ -144,6 +139,32 @@ pipeline {
                 }
             }
         }
+
+        // stage('Up Sonar') {
+        //     steps {
+        //         script {
+        //             dir('sonarqube') {
+        //                 try {
+        //                     sh 'docker-compose down'
+        //                 } catch (Exception e) {
+        //                     sh "echo $e"
+        //                 }
+        //             }
+        //         }
+        //         script {
+        //             dir('sonarqube') {
+        //                 try {
+        //                     sh 'docker-compose up -d'
+        //                 } catch (Exception e) {
+        //                     slackSend (color: 'error', message: "[ FALHA ] Não foi possivel fazer subir o Banco de Dados MySQL - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
+        //                     sh "echo $e"
+        //                     currentBuild.result = 'ABORTED'
+        //                     error('Erro')
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Publish') {
             steps {
@@ -195,7 +216,7 @@ pipeline {
             }
         }
 
-        stage('Down API') {
+        stage('Up API') {
             steps {
                 script {
                     dir('helm') {
@@ -208,11 +229,6 @@ pipeline {
                         }
                     }
                 }
-            }
-        }
-
-        stage('Up API') {
-            steps {
                 script {
                     dir('helm') {
                         try {       
