@@ -129,7 +129,7 @@ pipeline {
                             sh "echo $e"
                         }
                     }
-                },
+                }
                 script {
                     dir('sonarqube') {
                         try {
