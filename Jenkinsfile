@@ -126,9 +126,9 @@ pipeline {
                         try {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                                 sh 'sudo chmod -R 777 *'
-                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}"'
+                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.token="${SONAR_TOKEN}"'
                                 sh 'dotnet build'
-                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
+                                sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner end /d:sonar.token="${SONAR_TOKEN}"'
                             }
                         } catch (Exception e) {
                             slackSend (color: 'error', message: "[ FALHA ] Erro ao executar o SonarQube Analysis - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
