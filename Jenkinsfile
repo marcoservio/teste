@@ -108,16 +108,16 @@ pipeline {
             }
         } 
 
-        // stage('Sonar UP?') {
-        //     steps {
-        //         script {
-        //             slackSend (color: 'warning', message: "Para continuar inicialize o Sonar. Acesse [Janela de 5 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
-        //             timeout(time: 5, unit: 'MINUTES') {
-        //                 input(id: 'deploy-gate', message: 'Ready to go?', ok: 'Ok')
-        //             }
-        //         }
-        //     }
-        // }       
+        stage('SonarQube UP?') {
+            steps {
+                script {
+                    slackSend (color: 'warning', message: "Para continuar inicialize o SonarQube. Acesse [Janela de 5 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
+                    timeout(time: 5, unit: 'MINUTES') {
+                        input(id: 'deploy-gate', message: 'Ready to go?', ok: 'Ok')
+                    }
+                }
+            }
+        }       
         
         stage('SonarQube Analysis') {
             steps {
