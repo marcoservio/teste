@@ -125,20 +125,9 @@ pipeline {
                     dir('src') {
                         try {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                                withSonarQubeEnv('SonarQube') {
-                                    sh '''
-                                        export PATH="$PATH:/root/.dotnet/tools"
-                                        apt-get update && apt install default-jre -y 
-                                        /root/.dotnet/tools/dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}
-                                        dotnet build
-                                        /root/.dotnet/tools/dotnet-sonarscanner dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
-                                        '''
-
-                                    // sh 'dotnet tool install --global dotnet-sonarscanner'
-                                    // sh 'dotnet-sonarscanner dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}"'
-                                    // sh 'dotnet build'
-                                    // sh 'dotnet-sonarscanner dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
-                                }
+                                sh 'dotnet-sonarscanner dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}"'
+                                sh 'dotnet build'
+                                sh 'dotnet-sonarscanner dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"'
                             }
                         } catch (Exception e) {
                             slackSend (color: 'error', message: "[ FALHA ] Erro ao executar o SonarQube Analysis - ${BUILD_URL} em ${currentBuild.durationString}s", tokenCredentialId: 'slack-token')
