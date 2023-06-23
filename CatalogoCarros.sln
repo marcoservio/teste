@@ -5,11 +5,11 @@ VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CF0736A3-FB45-4380-9BC0-8E3FD7EB21D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogoCarros", "src\CatalogoCarros.csproj", "{63C05FD6-E813-4C81-AFD2-00DD4D334DC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogoCarros.Api", "src\CatalogoCarros.Api.csproj", "{63C05FD6-E813-4C81-AFD2-00DD4D334DC3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{460DA478-88ED-4656-B86E-36E0CF806F5B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{42C5EC3D-FE29-4D03-8D70-026980C432D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogoCarrosTeste", "tests\CatalogoCarrosTeste\CatalogoCarrosTeste.csproj", "{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogoCarros.Testes", "tests\CatalogoCarros.Testes.csproj", "{8740195B-19A1-4F83-9D03-A3ABAC5072BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +21,17 @@ Global
 		{63C05FD6-E813-4C81-AFD2-00DD4D334DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63C05FD6-E813-4C81-AFD2-00DD4D334DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63C05FD6-E813-4C81-AFD2-00DD4D334DC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8740195B-19A1-4F83-9D03-A3ABAC5072BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8740195B-19A1-4F83-9D03-A3ABAC5072BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8740195B-19A1-4F83-9D03-A3ABAC5072BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8740195B-19A1-4F83-9D03-A3ABAC5072BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63C05FD6-E813-4C81-AFD2-00DD4D334DC3} = {CF0736A3-FB45-4380-9BC0-8E3FD7EB21D4}
-		{9ECDC2BA-EB68-453A-BF2A-A6E2F035F7D6} = {460DA478-88ED-4656-B86E-36E0CF806F5B}
+		{8740195B-19A1-4F83-9D03-A3ABAC5072BD} = {42C5EC3D-FE29-4D03-8D70-026980C432D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA05274D-C0AF-40A2-9037-023259CBBFEF}

@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: 'carro'
+      MYSQL_DATABASE: 'catalogo-carros'
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
     expose:

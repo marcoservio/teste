@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: catalogo-carros-deployment
+  namespace: catalogo-carros
 spec:
   replicas: 1
   selector:

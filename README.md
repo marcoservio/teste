@@ -83,13 +83,13 @@ Certifique-se de que seu cluster Kubernetes esteja em execução e configurado c
    ```bash
    kubectl create ns catalogo-carros
    kubectl apply -f kube-state-metrics/
-   kubectl apply -f catalogo-carros/ -n catalogo-carros
-   kubectl apply -f alertmanager/ -n catalogo-carros
-   kubectl apply -f prometheus/ -n catalogo-carros
-   kubectl apply -f grafana/ -n catalogo-carros
-   kubectl apply -f mysql/ -n catalogo-carros
-   kubectl apply -f nginx/ -n catalogo-carros
-   kubectl apply -f client/ -n catalogo-carros
+   kubectl apply -f catalogo-carros/
+   kubectl apply -f alertmanager/
+   kubectl apply -f prometheus/ 
+   kubectl apply -f grafana/ 
+   kubectl apply -f mysql/ 
+   kubectl apply -f nginx/ 
+   kubectl apply -f client/ 
    ```
 
 2. Verifique o status da implantação:

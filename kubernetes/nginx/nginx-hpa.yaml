@@ -2,6 +2,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: nginx-hpa
+  namespace: catalogo-carros
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

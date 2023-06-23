@@ -1,0 +1,13 @@
+Marca: A marca do carro (por exemplo, Toyota, Ford, Honda).
+Modelo: O modelo do carro (por exemplo, Corolla, Focus, Civic).
+Ano: O ano de fabricação do carro.
+Cor: A cor do carro.
+Tipo de corpo: O tipo de carroceria do veículo (por exemplo, sedã, SUV, hatchback).
+Motor: As especificações do motor do carro, como cilindrada, potência, tipo de combustível.
+Transmissão: O tipo de transmissão do veículo (por exemplo, manual, automática).
+Quilometragem: O número de quilômetros percorridos pelo carro.
+Preço: O preço de venda ou locação do carro.
+Número de portas: O número de portas do veículo.
+Capacidade de passageiros: O número máximo de passageiros que o carro pode acomodar.
+Descrição: Uma descrição detalhada do carro, incluindo recursos adicionais e informações relevantes.
+Imagens: URLs das imagens do carro.

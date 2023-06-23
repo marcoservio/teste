@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-alert-configmap
+  namespace: catalogo-carros
 data:
   alert.rules: |-
     groups:

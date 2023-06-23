@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alertmanager-configmap
+  namespace: catalogo-carros
 data:
   alertmanager.yml: |-
     global:
