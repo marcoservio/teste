@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('Checkout') {
+        stage('Checkout Repository') {
             steps {
                 script {
                     try {
@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        stage('Restore') {
+        stage('Restore Dependencies') {
             steps {
                 script {
                     dir('src') {     
@@ -40,7 +40,7 @@ pipeline {
             }
         }
 
-        stage('Up MySQL') {
+        stage('Database Setup') {
             steps {
                 script {
                     dir('src') {
@@ -57,7 +57,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 script {
                     dir('tests') {
@@ -74,7 +74,7 @@ pipeline {
             }
         }
 
-        stage('Down MySQL') {
+        stage('Database Teardown') {
             steps {
                 script {
                     dir('src') {
@@ -91,7 +91,7 @@ pipeline {
             }
         }       
 
-        stage('Build') {
+        stage('Build Project') {
             steps {
                 script {
                     dir('src') {
@@ -108,7 +108,7 @@ pipeline {
             }
         } 
 
-        stage('SonarQube UP?') {
+        stage('SonarQube Check') {
             steps {
                 script {
                     slackSend (color: 'warning', message: "Para continuar inicialize o SonarQube. Acesse [Janela de 5 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
@@ -141,7 +141,7 @@ pipeline {
             }
         }
 
-        stage('Publish') {
+        stage('Publish Project') {
             steps {
                 script {
                     dir('src') {
@@ -158,7 +158,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build API') {
+        stage('Docker Image Build') {
             steps {
                 script {
                     try {
@@ -173,7 +173,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push API') {
+        stage('Docker Image Push') {
             steps {
                 script {
                     try {                    
@@ -191,7 +191,7 @@ pipeline {
             }
         }
 
-        stage('Up API') {
+        stage('API Deployment') {
             steps {
                 script {
                     dir('helm') {
@@ -221,7 +221,7 @@ pipeline {
             }
         }
         
-        stage('Notificando') {
+        stage('Notification') {
             steps {
                 slackSend (color: 'good', message: '[ Sucesso ] O novo build esta disponivel em: http://localhost/swagger/index.html ', tokenCredentialId: 'slack-token')
                 sh 'sudo rm -rf *'
