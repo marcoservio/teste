@@ -127,7 +127,6 @@ pipeline {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                                 withSonarQubeEnv('SonarQube') {
                                     sh '''
-                                        dotnet tool install --global dotnet-sonarscanner
                                         export PATH="$PATH:/root/.dotnet/tools"
                                         apt-get update && apt install default-jre -y 
                                         /root/.dotnet/tools/dotnet sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="${SONAR_TOKEN}
