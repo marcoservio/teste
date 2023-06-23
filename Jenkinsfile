@@ -91,7 +91,7 @@ pipeline {
             }
         }
 
-        stage ('Sonar UP?') {
+        stage('Sonar UP?') {
             steps {
                 script {
                     slackSend (color: 'warning', message: "Para continuar com inicialize o Sonar e acesse [Janela de 10 minutos]: ${JOB_URL}", tokenCredentialId: 'slack-token')
