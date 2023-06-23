@@ -228,7 +228,7 @@ pipeline {
 
         stage('Limpar Workspace') {
             steps {
-                sudo sh 'rm -rf *'
+                sh 'sudo rm -rf *'
             }
         }
     }
