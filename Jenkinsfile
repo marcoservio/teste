@@ -125,6 +125,7 @@ pipeline {
                     dir('src') {
                         try {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                                sh 'export SONAR_SCANNER_OPTS="-Dfile.encoding=UTF-8"'
                                 sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner begin /k:"catalogo-carros" /d:sonar.host.url="http://localhost:9000" /d:sonar.verbose=true /d:sonar.token="${SONAR_TOKEN}"'
                                 sh 'sudo dotnet build'
                                 sh 'sudo /var/lib/jenkins/.dotnet/tools/dotnet-sonarscanner end /d:sonar.token="${SONAR_TOKEN}"'
